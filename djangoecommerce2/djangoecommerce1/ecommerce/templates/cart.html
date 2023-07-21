@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid">
+    {% if not cart %}
+    <div>
+        <h1 class="text-center">cart is empty</h1>
+        <strong><a href="{% url 'shop:home' %}">Continue Shopping</a> </strong>
+    </div>
+
+     {% else%}
+
+
+<div class="row">
+    <h1 class="text-center">Shopping cart</h1>
+  <div class="col-6">
+    <table class="table table-bordered">
+     <tr>
+      <th colspan="5" class="text-center"> cart items</th>
+       {% for i in cart %}
+     </tr>
+     <tr>
+      <td><img src="{{i.products.image.url}}" height="100px" width="100px"></td>
+      <td><strong>{{i.products.name}}</strong></td>
+      <td>
+          <p><strong>ProductsId:</strong>{{i.products.id}}</p>
+      <p><strong>Unit Price:</strong>{{i.products.price}}</p>
+      <p><strong>Quantity:</strong>{{i.quantity}}*{{i.products.price}}</p>
+      </td>
+         <td>Subtotal:{{i.subtotal}}</td>
+         <td>
+             {% if i.quantity < i.products.stock %}
+             <a href="{% url 'cart:add_cart' i.products.id %}"><i class="fa-solid fa-circle-plus text-success"></i></a>
+             <a href="{% url 'cart:less_cart' i.products.id %}"><i class="fa-solid fa-circle-minus text-primary"></i></a>
+             <a href="{% url 'cart:delete_cart' i.products.id %}"><i class="fa-solid fa-trash text-danger"></i></a>
+             {% else %}
+             <a href="{% url 'cart:less_cart' i.products.id %}"><i class="fa-solid fa-circle-minus text-primary"></i></a>
+             <a href="{% url 'cart:delete_cart' i.products.id %}"><i class="fa-solid fa-trash text-danger"></i></a>
+             {% endif %}
+
+         </td>
+     </tr>
+        {% endfor %}
+    </table>
+       <a href="{% url 'shop:home' %}" class="btn btn-primary ">Continue Shopping</a>
+        <a href="#" class="btn btn-primary " style="position:absolute;right:0;">Place Order</a>
+  </div>
+    <div class="col-6 border ">
+    <table class="table table-bordered">
+            <tr><th colspan="5" class="text-center">Check Out</th></tr>
+              <tr><td>{{total}}</td></tr>
+
+
+    </table>
+
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
